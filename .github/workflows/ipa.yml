@@ -17,7 +17,7 @@ on:
         description: 'Apple ID Password'
         required: true
       operation:
-        description: 'Operation to do, choices: lookup, historyver, download, historyver_id, download_id'
+        description: 'Operation to do, choices: lookup, historyver, download, historyver_id, download_id, purchase_id'
       
       appBundleId:
         description: 'AppStore Bundle-ID (needed when using non-*_id operations)'
@@ -113,6 +113,10 @@ jobs:
             echo "::set-output name=appVer::$(echo "$output" | jq -r '.appVer')"
             echo "::set-output name=appId::$(echo "$output" | jq -r '.appId')"
             echo "::set-output name=appVerId::$(echo "$output" | jq -r '.appVerId')"
+          elif [[ "$op" == "purchase_id" ]]; then
+            echo "Handle purchase.."
+            output=$(python3 ipatool-py/main.py --json purchase -s http://127.0.0.1:9000 --appId ${{ github.event.inputs.appId }})
+            echo "Got Purchasing JSON result: $output"
           else
             echo "Unknown Operation: $op"
           fi
