@@ -25,7 +25,6 @@ on:
       appCountry:
         description: 'AppStore Country (needed when using non-*_id operations)'
         required: false
-        default: 'JP'
       
       appVerId:
         description: 'App Version Id Number (for downloading history versions)'
@@ -80,6 +79,7 @@ jobs:
         run: |
           # available operations: lookup, historyver, download, historyver_id, download_id
           op=${{ github.event.inputs.operation }}
+          apple_acc=${{ github.event.inputs.appleId }}
           if [[ "$op" == "lookup" ]]; then
             if [[ "${{ github.event.inputs.appBundleId }}" != "" ]]; then
               python3 ipatool-py/main.py --json lookup --get-verid -b ${{ github.event.inputs.appBundleId }} -c ${{ github.event.inputs.appCountry }}
